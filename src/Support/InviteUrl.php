@@ -21,7 +21,7 @@ final class InviteUrl
     public static function for(CanResetPassword $user, #[SensitiveParameter] string $token): string
     {
         $relative = URL::temporarySignedRoute(
-            self::ROUTE,
+            (string) config('provisioning.invite.route', self::ROUTE),
             now()->addMinutes((int) config('provisioning.broker.expire', 10080)),
             ['token' => $token, 'email' => $user->getEmailForPasswordReset()],
             absolute: false,

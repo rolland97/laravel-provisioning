@@ -18,6 +18,12 @@ use Spatie\Activitylog\Models\Activity;
  */
 
 beforeEach(function (): void {
+    // CI also runs the core suite with the activity log uninstalled, to prove the
+    // package does not need it; there is nothing for this file to check then.
+    if (! function_exists('activity')) {
+        $this->markTestSkipped('spatie/laravel-activitylog is not installed.');
+    }
+
     config(['provisioning.activity_log' => true]);
 
     // spatie/laravel-activitylog ships its migration as a stub, as this package does.

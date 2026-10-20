@@ -7,6 +7,7 @@ namespace Rolland\Provisioning\Tests\Fixtures\Panel;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -25,6 +26,7 @@ final class PlainPanelProvider extends PanelProvider
             ->id('plain')
             ->path('plain')
             ->login()
+            ->pages([Dashboard::class])
 
             ->middleware([
                 EncryptCookies::class,

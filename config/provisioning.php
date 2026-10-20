@@ -37,9 +37,12 @@ return [
     ],
 
     'invite' => [
-        // Path of the accept-invite page (Filament plugin). The route is named
-        // `provisioning.accept`.
+        // Path of the accept-invite page. With the Filament plugin it sits under the
+        // accepting panel's path, and `route` is set to that panel's route name.
         'path' => 'accept-invite/{token}',
+        // Route name the invite link points at. Without Filament, name your own
+        // accept route this (it receives `token` and a signed `email`).
+        'route' => 'provisioning.accept',
         // Mail view; publish `provisioning-views` to restyle, or point at your own.
         'mail_view' => 'provisioning::mail.invite',
     ],
