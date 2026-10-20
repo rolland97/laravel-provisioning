@@ -44,8 +44,8 @@
 
 ## Phase 5: US3 — Reset someone's two-factor (P2)
 
-- [ ] T021 [US3] Port `$SRC/tests/Feature/Accounts/ResetTwoFactorTest.php` → `tests/Core/ResetTwoFactorTest.php` (red): configured columns nulled; event `via` admin/console with causer id; command resets by email, exit 1 for an unknown email, reports a not-enrolled account and changes nothing; no secret in event or output
-- [ ] T022 [US3] Implement `Actions/ResetTwoFactor`, `Console/ResetTwoFactorCommand` (`provisioning:reset-two-factor {email}`) — T021 green
+- [X] T021 [US3] Port `$SRC/tests/Feature/Accounts/ResetTwoFactorTest.php` → `tests/Core/ResetTwoFactorTest.php` (red): configured columns nulled; event `via` admin/console with causer id; command resets by email, exit 1 for an unknown email, reports a not-enrolled account and changes nothing; no secret in event or output
+- [X] T022 [US3] Implement `Actions/ResetTwoFactor`, `Console/ResetTwoFactorCommand` (`provisioning:reset-two-factor {email}`) — T021 green
 
 ## Phase 6: US5 — Keep an audit trail the host chooses (P3, before the bridge: core only)
 

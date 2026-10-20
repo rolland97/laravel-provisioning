@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rolland\Provisioning;
 
 use Illuminate\Support\ServiceProvider;
+use Rolland\Provisioning\Console\ResetTwoFactorCommand;
 use Rolland\Provisioning\Contracts\DecidesEnforcementSkip;
 use Rolland\Provisioning\Contracts\HandlesPasswordChange;
 use Rolland\Provisioning\Contracts\ProvidesPasswordRules;
@@ -37,6 +38,8 @@ final class ProvisioningServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'provisioning');
 
         if ($this->app->runningInConsole()) {
+            $this->commands([ResetTwoFactorCommand::class]);
+
             $this->publishes([__DIR__.'/../config/provisioning.php' => config_path('provisioning.php')], 'provisioning-config');
             $this->publishes([
                 __DIR__.'/../database/migrations/add_provisioning_columns_to_users_table.php.stub' => database_path('migrations/'.date('Y_m_d_His').'_add_provisioning_columns_to_users_table.php'),
