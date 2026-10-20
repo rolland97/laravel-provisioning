@@ -1,0 +1,24 @@
+* text=auto eol=lf
+
+*.md        diff=markdown
+*.php       diff=php
+*.blade.php linguist-language=PHP
+
+# ⚠️ Constitution VI / AGENTS.md R-027.
+#
+# Development tooling MUST be excluded from the distribution archive BEFORE the
+# first tag: a tag cannot be retracted. tests/Core/DistributionArchiveTest.php
+# fails if anything below reaches `git archive`.
+/.github            export-ignore
+/.specify           export-ignore
+/.claude            export-ignore
+/specs              export-ignore
+/tests              export-ignore
+/.gitattributes     export-ignore
+/.gitignore         export-ignore
+/AGENTS.md          export-ignore
+/CLAUDE.md          export-ignore
+/phpunit.xml.dist   export-ignore
+/phpstan.neon.dist  export-ignore
+/pint.json          export-ignore
+/package.json       export-ignore
