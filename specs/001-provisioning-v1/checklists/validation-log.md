@@ -97,3 +97,9 @@ Minor, recorded rather than changed:
 FR-001 (unusable password on create) is documented as host code in the README with the
 recipe the consumer uses; the package provides `SendInvite` and `ArmForcedPasswordChange`
 for both branches. Every other FR and SC has a test listed in tasks.md.
+
+## T037 — owner review
+
+Rolland, 2026-10-20: public API approved ("approve, proceed with care"). Next: the
+consumer's adoption slice; no tag until it builds against this branch with its own tests'
+assertions unchanged.
