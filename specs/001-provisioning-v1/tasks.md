@@ -28,12 +28,12 @@
 
 ## Phase 3: US1 — Invite a person instead of choosing their password (P1) 🎯
 
-- [ ] T011 [US1] Port `$SRC/tests/Feature/Accounts/ProvisionUserTest.php` → `tests/Core/SendInviteTest.php` (red): token issued in `provisioning_tokens`, notification queued to the user, creation-succeeds-when-mail-fails, resend invalidates the previous token, events `InviteSent`/`InviteResent` with ids
-- [ ] T012 [P] [US1] Port `$SRC/tests/Feature/Accounts/TokenIndependenceTest.php` → `tests/Core/TokenIndependenceTest.php` (red): an invite token and a password-reset token for the same email coexist and neither consumes the other
-- [ ] T013 [P] [US1] New `tests/Core/InviteIsEncryptedOnTheQueueTest.php` (red): with a real `database`/`sync`-capturing queue, the pushed payload does not contain the token
-- [ ] T014 [P] [US1] Port `$SRC/tests/Feature/Accounts/AcceptProvisioningInviteTest.php` (core parts) → `tests/Core/AcceptInviteTest.php` (red): valid token sets the password, does not arm the forced change, rotates remember token, fires `InviteAccepted`; used / expired / superseded / wrong-email tokens refused with nothing changed
-- [ ] T015 [P] [US1] Port `$SRC/tests/Feature/Accounts/ProvisioningMailRenderTest.php` → `tests/Core/InviteMailTest.php` (red): signed URL to the configured path, expiry text, no token outside the URL, host-overridable view
-- [ ] T016 [US1] Implement `Notifications/ProvisioningInvite` (ShouldQueue + ShouldBeEncrypted), `Support/InviteUrl`, `Actions/SendInvite`, `Actions/CompleteProvisioning`, `Actions/AcceptInvite`, `resources/views/mail/invite.blade.php`, `lang/en|ms` keys used — T011–T015 green
+- [X] T011 [US1] Port `$SRC/tests/Feature/Accounts/ProvisionUserTest.php` → `tests/Core/SendInviteTest.php` (red): token issued in `provisioning_tokens`, notification queued to the user, creation-succeeds-when-mail-fails, resend invalidates the previous token, events `InviteSent`/`InviteResent` with ids
+- [X] T012 [P] [US1] Port `$SRC/tests/Feature/Accounts/TokenIndependenceTest.php` → `tests/Core/TokenIndependenceTest.php` (red): an invite token and a password-reset token for the same email coexist and neither consumes the other
+- [X] T013 [P] [US1] New `tests/Core/InviteIsEncryptedOnTheQueueTest.php` (red): with a real `database`/`sync`-capturing queue, the pushed payload does not contain the token
+- [X] T014 [P] [US1] Port `$SRC/tests/Feature/Accounts/AcceptProvisioningInviteTest.php` (core parts) → `tests/Core/AcceptInviteTest.php` (red): valid token sets the password, does not arm the forced change, rotates remember token, fires `InviteAccepted`; used / expired / superseded / wrong-email tokens refused with nothing changed
+- [X] T015 [P] [US1] Port `$SRC/tests/Feature/Accounts/ProvisioningMailRenderTest.php` → `tests/Core/InviteMailTest.php` (red): signed URL to the configured path, expiry text, no token outside the URL, host-overridable view
+- [X] T016 [US1] Implement `Notifications/ProvisioningInvite` (ShouldQueue + ShouldBeEncrypted), `Support/InviteUrl`, `Actions/SendInvite`, `Actions/CompleteProvisioning`, `Actions/AcceptInvite`, `resources/views/mail/invite.blade.php`, `lang/en|ms` keys used — T011–T015 green
 
 ## Phase 4: US2 — A password someone else set must be changed first (P1)
 
