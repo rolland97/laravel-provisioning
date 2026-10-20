@@ -17,12 +17,12 @@
 
 ## Phase 2: Foundational
 
-- [ ] T005 `config/provisioning.php` (columns ×6, broker, invite path + mail view, enforcement except/redirect, hooks ×3, `activity_log`, `record_logins`) and `src/Support/Columns.php` (typed accessors)
+- [X] T005 `config/provisioning.php` (columns ×6, broker, invite path + mail view, enforcement except/redirect, hooks ×3, `activity_log`, `record_logins`) and `src/Support/Columns.php` (typed accessors)
 - [X] T006 [P] Stubs `database/migrations/add_provisioning_columns_to_users_table.php.stub` (four columns, each `hasColumn`-guarded, `force_password_change` default **false**) and `create_provisioning_tokens_table.php.stub` (email PK, token, created_at)
-- [ ] T007 [P] Contracts `HandlesPasswordChange`, `DecidesEnforcementSkip`, `ProvidesPasswordRules` + defaults `NoopPasswordChange`, `NeverSkipEnforcement`, `LaravelPasswordRules`
-- [ ] T008 [P] Events `InviteSent`, `InviteResent`, `InviteAccepted`, `ForcedPasswordChangeCompleted`, `TwoFactorReset` — public readonly scalars only
-- [ ] T009 Core test `tests/Core/ProviderTest.php` first (red): provider registers the broker from config when the host has none and leaves a host-defined broker untouched; binds the three hooks from config; publishes config/stubs/translations/views under the four tags; boots with Filament absent (class check). Then `src/ProvisioningServiceProvider.php` (green)
-- [ ] T010 Core test `tests/Core/EventsCarryNoSecretsTest.php` (red): reflection over every event — no object-typed property, no property named like password/token/secret/code
+- [X] T007 [P] Contracts `HandlesPasswordChange`, `DecidesEnforcementSkip`, `ProvidesPasswordRules` + defaults `NoopPasswordChange`, `NeverSkipEnforcement`, `LaravelPasswordRules`
+- [X] T008 [P] Events `InviteSent`, `InviteResent`, `InviteAccepted`, `ForcedPasswordChangeCompleted`, `TwoFactorReset` — public readonly scalars only
+- [X] T009 Core test `tests/Core/ProviderTest.php` first (red): provider registers the broker from config when the host has none and leaves a host-defined broker untouched; binds the three hooks from config; publishes config/stubs/translations/views under the four tags; boots with Filament absent (class check). Then `src/ProvisioningServiceProvider.php` (green)
+- [X] T010 Core test `tests/Core/EventsCarryNoSecretsTest.php` (red): reflection over every event — no object-typed property, no property named like password/token/secret/code
 
 ---
 

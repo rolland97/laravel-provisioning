@@ -1,7 +1,14 @@
 {
     "name": "rolland97/laravel-provisioning",
     "description": "Admin-created accounts for Laravel: invite instead of a password, a forced change when someone else set it, and a two-factor reset — with an optional Filament v5 panel plugin.",
-    "keywords": ["laravel", "provisioning", "invite", "password", "two-factor", "filament"],
+    "keywords": [
+        "laravel",
+        "provisioning",
+        "invite",
+        "password",
+        "two-factor",
+        "filament"
+    ],
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -14,9 +21,11 @@
         "illuminate/auth": "^13.0",
         "illuminate/console": "^13.0",
         "illuminate/database": "^13.0",
+        "illuminate/http": "^13.0",
         "illuminate/notifications": "^13.0",
         "illuminate/queue": "^13.0",
-        "illuminate/support": "^13.0"
+        "illuminate/support": "^13.0",
+        "illuminate/validation": "^13.0"
     },
     "require-dev": {
         "filament/filament": "^5.0",
