@@ -7,6 +7,7 @@ namespace Rolland\Provisioning\Actions;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Rolland\Provisioning\Contracts\DecidesEnforcementSkip;
 use Rolland\Provisioning\Contracts\HandlesPasswordChange;
@@ -45,8 +46,14 @@ final class CompleteForcedPasswordChange
             ]);
         }
 
+        // The remember token rotates with the password, as on a password reset: a
+        // remember-me login made while someone else's password was in force must not
+        // outlive it. Ending other live sessions is the host's policy
+        // (HandlesPasswordChange); a Filament panel's AuthenticateSession already
+        // signs out sessions still holding the old password hash.
         $user->forceFill([
             $user->getAuthPasswordName() => Hash::make($newPassword),
+            $user->getRememberTokenName() => Str::random(60),
             Columns::forcePasswordChange() => false,
             Columns::passwordChangedAt() => now(),
         ])->save();

@@ -22,8 +22,17 @@ use Rolland\Provisioning\Tests\Fixtures\User;
 
 function flaggedUser(): User
 {
-    return User::query()->create(['name' => 'Ada', 'email' => 'ada@example.test', 'password' => 'set-by-an-admin-1', 'force_password_change' => true]);
+    return User::query()->create(['name' => 'Ada', 'email' => 'ada@example.test', 'password' => 'set-by-an-admin-1', 'force_password_change' => true, 'remember_token' => 'remembered-under-the-admin-password']);
 }
+
+it('rotates the remember token, so a remember-me login made with the old password dies', function (): void {
+    $user = flaggedUser();
+
+    app(CompleteForcedPasswordChange::class)->handle($user, 'my-own-new-secret-1');
+
+    expect($user->refresh()->remember_token)->not->toBe('remembered-under-the-admin-password')
+        ->and($user->remember_token)->not->toBeEmpty();
+});
 
 it('saves the new password, clears the flag, stamps the time, runs the hook once, and reports it', function (): void {
     Event::fake([ForcedPasswordChangeCompleted::class]);
