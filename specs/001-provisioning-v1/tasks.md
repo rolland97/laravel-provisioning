@@ -37,10 +37,10 @@
 
 ## Phase 4: US2 — A password someone else set must be changed first (P1)
 
-- [ ] T017 [US2] Port `$SRC/tests/Feature/Accounts/ArmForcePasswordChangeTest.php` → `tests/Core/ArmForcedPasswordChangeTest.php` (red): explicit arm action; a person-chosen password never arms
-- [ ] T018 [P] [US2] Port `$SRC/tests/Feature/Accounts/EnforcePasswordChangeTest.php` (core parts) → `tests/Core/EnforcePasswordChangeTest.php` (red): armed user redirected; configured `except` routes pass; skip hook true passes and leaves the flag; flag off passes
-- [ ] T019 [P] [US2] New `tests/Core/CompleteForcedPasswordChangeTest.php` (red, from `$SRC` `CompleteForcedPasswordChange` + `Security/PasswordChangeSessionTest.php` intent): same-as-current refused (no change); success clears flag, stamps `password_changed_at`, calls `HandlesPasswordChange` once with the user, fires the event; `blocksCompletion` true refuses
-- [ ] T020 [US2] Implement `Actions/ArmForcedPasswordChange`, `Actions/CompleteForcedPasswordChange`, `Http/Middleware/EnforcePasswordChange` — T017–T019 green
+- [X] T017 [US2] Port `$SRC/tests/Feature/Accounts/ArmForcePasswordChangeTest.php` → `tests/Core/ArmForcedPasswordChangeTest.php` (red): explicit arm action; a person-chosen password never arms
+- [X] T018 [P] [US2] Port `$SRC/tests/Feature/Accounts/EnforcePasswordChangeTest.php` (core parts) → `tests/Core/EnforcePasswordChangeTest.php` (red): armed user redirected; configured `except` routes pass; skip hook true passes and leaves the flag; flag off passes
+- [X] T019 [P] [US2] New `tests/Core/CompleteForcedPasswordChangeTest.php` (red, from `$SRC` `CompleteForcedPasswordChange` + `Security/PasswordChangeSessionTest.php` intent): same-as-current refused (no change); success clears flag, stamps `password_changed_at`, calls `HandlesPasswordChange` once with the user, fires the event; `blocksCompletion` true refuses
+- [X] T020 [US2] Implement `Actions/ArmForcedPasswordChange`, `Actions/CompleteForcedPasswordChange`, `Http/Middleware/EnforcePasswordChange` — T017–T019 green
 
 ## Phase 5: US3 — Reset someone's two-factor (P2)
 
