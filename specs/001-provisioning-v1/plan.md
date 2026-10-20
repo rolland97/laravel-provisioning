@@ -20,7 +20,7 @@ API in [contracts/public-api.md](contracts/public-api.md); schema in [data-model
 
 **Language/Version**: PHP ^8.3 (developed on 8.5)
 
-**Primary Dependencies**: `illuminate/{support,auth,notifications,queue,database,console}` ^13; dev: `filament/filament` ^5, `orchestra/testbench` ^11, `pestphp/pest` ^4 (+ browser plugin), `larastan/larastan` ^3, `laravel/pint`; suggest: `filament/filament`, `spatie/laravel-activitylog`
+**Primary Dependencies**: `illuminate/{support,auth,notifications,queue,database,console}` ^13; dev: `filament/filament` ^5, `orchestra/testbench` ^11, `pestphp/pest` ^5 + `pestphp/pest-plugin-browser` ^5 (PHPUnit 13), Playwright 1.64 (npm), `larastan/larastan` ^3, `laravel/pint`, `spatie/laravel-activitylog` ^5 — ⚠️ amended during T029 from Pest ^4: Pest 4's browser plugin hangs on Playwright after 1.61, and Pest 5 / Playwright 1.64 are the consumer's versions, so the shared browser cache keeps one Chromium; suggest: `filament/filament`, `spatie/laravel-activitylog`
 
 **Storage**: host database — four user columns (stub, guarded), one token table (stub)
 

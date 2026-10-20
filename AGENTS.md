@@ -9,7 +9,8 @@ file is the bug**. Loaded as a mandatory gate before `/speckit-plan`
 Tags: **[ratified]** — the source exists in this repository now. **[inherited]** — the source
 is in the consumer application (`ew-global-sdn-bhd/procument`, `dev6`), path given.
 **[pending artifact]** — settled, but the enforcing file does not exist yet; ⚠️ re-cite when
-the plan creates it.
+the plan creates it. ✅ None remain: R-022…R-027 were re-cited against their files on
+2026-10-20 (T033).
 
 ---
 
@@ -83,17 +84,24 @@ the plan creates it.
   adoption proof. *Constitution I; SC-004.* **[ratified]**
 - **R-022** — Three suites: core (run in CI with Filament **uninstalled**), bridge (a panel with
   the plugin and one without), browser (accept page and change page in light and dark).
-  *Constitution V, Workflow.* **[pending artifact]** — `phpunit.xml.dist`, `.github/workflows/tests.yml`.
+  *Constitution V, Workflow; `phpunit.xml.dist` (suites `core`, `bridge`, `browser`),
+  `.github/workflows/tests.yml` (jobs `test`, `browser`, `core-without-optional-packages`).*
+  **[ratified]**
 - **R-023** — Random order; fail on warnings, risky tests and output; tests never print.
-  *Constitution I.* **[pending artifact]** — `phpunit.xml.dist`.
+  *Constitution I; `phpunit.xml.dist` (`executionOrder="random"`, `failOnWarning`,
+  `failOnRisky`, `beStrictAboutOutputDuringTests`).* **[ratified]**
 - **R-024** — PHPStan over `src` and `config` at a level never lowered; no new baseline entries.
-  Pint owns formatting. *Constitution, Platform.* **[pending artifact]** — `phpstan.neon.dist`, `pint.json`.
+  Pint owns formatting. *Constitution, Platform; `phpstan.neon.dist` (`level: 8`, paths `src`,
+  `config`), `pint.json`, CI job `static`.* **[ratified]**
 - **R-025** — CI actions pinned to a full SHA with the version in a comment; least-privilege
-  `permissions:` per workflow. *Constitution, Platform.* **[pending artifact]** — workflow file.
+  `permissions:` per workflow. *Constitution, Platform; `.github/workflows/tests.yml`.* **[ratified]**
 - **R-026** — PHP ^8.3, `illuminate/*` ^13, Filament v5 for the bridge; do not widen without a
-  host that needs it. *Constitution, Platform.* **[pending artifact]** — `composer.json`.
+  host that needs it. *Constitution, Platform; `composer.json` `require`.* **[ratified]**
+  Dev tooling is Pest 5 / PHPUnit 13 / Playwright 1.64 — the consumer's versions; Pest 4's
+  browser plugin hangs on Playwright after 1.61 (plan, Technical Context).
 - **R-027** — `.gitattributes` `export-ignore` for specs, agent files, tests and build sources
-  before the first tag. *Constitution VI; FR-020.* **[pending artifact]** — `.gitattributes`.
+  before the first tag. *Constitution VI; FR-020; `.gitattributes`, `tests/Core/DistributionArchiveTest.php`.*
+  **[ratified]**
 
 ## Workflow
 
