@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace Rolland\Provisioning;
 
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Rolland\Provisioning\Console\ResetTwoFactorCommand;
 use Rolland\Provisioning\Contracts\DecidesEnforcementSkip;
 use Rolland\Provisioning\Contracts\HandlesPasswordChange;
 use Rolland\Provisioning\Contracts\ProvidesPasswordRules;
+use Rolland\Provisioning\Events\ForcedPasswordChangeCompleted;
+use Rolland\Provisioning\Events\InviteAccepted;
+use Rolland\Provisioning\Events\InviteResent;
+use Rolland\Provisioning\Events\InviteSent;
+use Rolland\Provisioning\Events\TwoFactorReset;
+use Rolland\Provisioning\Listeners\RecordProvisioningActivity;
+use Rolland\Provisioning\Listeners\RecordSuccessfulLogin;
 
 final class ProvisioningServiceProvider extends ServiceProvider
 {
@@ -33,6 +42,7 @@ final class ProvisioningServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerBroker();
+        $this->registerListeners();
 
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'provisioning');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'provisioning');
@@ -47,6 +57,23 @@ final class ProvisioningServiceProvider extends ServiceProvider
             ], 'provisioning-migrations');
             $this->publishes([__DIR__.'/../lang' => $this->app->langPath('vendor/provisioning')], 'provisioning-translations');
             $this->publishes([__DIR__.'/../resources/views' => resource_path('views/vendor/provisioning')], 'provisioning-views');
+        }
+    }
+
+    /**
+     * The sign-in recorder, and — only when spatie/laravel-activitylog is installed —
+     * the activity writer. Each checks its own config switch when it runs.
+     */
+    private function registerListeners(): void
+    {
+        Event::listen(Login::class, RecordSuccessfulLogin::class);
+
+        // The `activity()` helper, not a class: activitylog moved its logger class
+        // between majors (v5: Support\\ActivityLogger), the helper stayed.
+        if (function_exists('activity')) {
+            foreach ([InviteSent::class, InviteResent::class, InviteAccepted::class, ForcedPasswordChangeCompleted::class, TwoFactorReset::class] as $event) {
+                Event::listen($event, RecordProvisioningActivity::class);
+            }
         }
     }
 

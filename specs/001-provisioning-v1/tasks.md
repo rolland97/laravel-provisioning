@@ -49,9 +49,9 @@
 
 ## Phase 6: US5 — Keep an audit trail the host chooses (P3, before the bridge: core only)
 
-- [ ] T023 [US5] Port `$SRC/tests/Feature/Accounts/RecordSuccessfulLoginTest.php` → `tests/Core/RecordSuccessfulLoginTest.php` (red): one UPDATE (query count), configured columns, disabled by `record_logins=false`
-- [ ] T024 [P] [US5] New `tests/Core/ActivityLogListenerTest.php` (red; `spatie/laravel-activitylog` in require-dev): five entries with the exact source names, `via` property, causer; with `activity_log=false` none; core suite still passes when the activity log is absent (class-existence guard)
-- [ ] T025 [US5] Implement `Listeners/RecordSuccessfulLogin`, `Listeners/RecordProvisioningActivity` + conditional registration — T023–T024 green
+- [X] T023 [US5] Port `$SRC/tests/Feature/Accounts/RecordSuccessfulLoginTest.php` → `tests/Core/RecordSuccessfulLoginTest.php` (red): one UPDATE (query count), configured columns, disabled by `record_logins=false`
+- [X] T024 [P] [US5] New `tests/Core/ActivityLogListenerTest.php` (red; `spatie/laravel-activitylog` in require-dev): five entries with the exact source names, `via` property, causer; with `activity_log=false` none; core suite still passes when the activity log is absent (class-existence guard)
+- [X] T025 [US5] Implement `Listeners/RecordSuccessfulLogin`, `Listeners/RecordProvisioningActivity` + conditional registration — T023–T024 green
 
 ## Phase 7: US4 — Install with or without Filament (P2)
 

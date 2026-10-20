@@ -35,6 +35,11 @@ abstract class TestCase extends Orchestra
     {
         $app['config']->set('database.default', 'testing');
         $app['config']->set('auth.providers.users.model', User::class);
+
+        // spatie/laravel-activitylog is a dev dependency, so its listener is registered
+        // in every test — but only ActivityLogListenerTest creates its table and
+        // switches it on.
+        $app['config']->set('provisioning.activity_log', false);
     }
 
     /**
