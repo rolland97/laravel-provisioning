@@ -92,3 +92,12 @@ by SHA as in that repository.
 `rolland97/laravel-provisioning`, namespace `Rolland\Provisioning`, provider
 `ProvisioningServiceProvider`, bridge `Rolland\Provisioning\Filament\ProvisioningPlugin`, config
 `provisioning.php`, translations `provisioning::` (`en`, `ms`). Matches `Rolland\Tree`.
+
+## R4 addendum — spike result (T004, 2026-10-20)
+
+Proven in `tests/Bridge/SpikeTest.php` against Filament 5 in Testbench: a `Filament\Contracts\Plugin`
+whose `register(Panel $panel)` calls `$panel->pages([...])->authMiddleware([...], isPersistent: true)`
+(a) serves its page through the middleware on that panel (`/admin/spike`, header present);
+(b) adds neither page nor middleware to a panel without it (`/plain/spike` 404, `/plain` no header);
+(c) puts the middleware in `Livewire::getPersistentMiddleware()`, so Livewire round trips run it.
+Seen red: with the plugin removed from the `admin` panel, (a) and (c) fail, and pass again when restored.

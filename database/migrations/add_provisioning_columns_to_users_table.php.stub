@@ -1,0 +1,56 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+/*
+ * laravel-provisioning — the four columns the package reads on the users table.
+ *
+ * ⚠️ `force_password_change` defaults to FALSE. Adding this column to a table of
+ * existing users must lock nobody out (constitution IV); arm the change explicitly
+ * with Rolland\Provisioning\Actions\ArmForcedPasswordChange.
+ *
+ * Each column is skipped when it already exists, so an application that already has
+ * them publishes this safely. Rename them here and in config/provisioning.php together.
+ */
+return new class extends Migration
+{
+    public function up(): void
+    {
+        $table = (new (config('auth.providers.users.model', 'App\\Models\\User')))->getTable();
+        $columns = config('provisioning.columns', []);
+
+        $forcePasswordChange = $columns['force_password_change'] ?? 'force_password_change';
+        $passwordChangedAt = $columns['password_changed_at'] ?? 'password_changed_at';
+        $lastLoginAt = $columns['last_login_at'] ?? 'last_login_at';
+        $loginCount = $columns['login_count'] ?? 'login_count';
+
+        Schema::table($table, function (Blueprint $blueprint) use ($table, $forcePasswordChange, $passwordChangedAt, $lastLoginAt, $loginCount): void {
+            if (! Schema::hasColumn($table, $forcePasswordChange)) {
+                $blueprint->boolean($forcePasswordChange)->default(false);
+            }
+
+            if (! Schema::hasColumn($table, $passwordChangedAt)) {
+                $blueprint->timestamp($passwordChangedAt)->nullable();
+            }
+
+            if (! Schema::hasColumn($table, $lastLoginAt)) {
+                $blueprint->timestamp($lastLoginAt)->nullable();
+            }
+
+            if (! Schema::hasColumn($table, $loginCount)) {
+                $blueprint->unsignedInteger($loginCount)->default(0);
+            }
+        });
+    }
+
+    public function down(): void
+    {
+        // Deliberately empty: these columns may have existed before this migration
+        // (it skips any that did), so dropping them here could destroy data it never
+        // created. Remove them by hand if you are uninstalling.
+    }
+};

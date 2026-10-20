@@ -1,0 +1,69 @@
+{
+    "name": "rolland97/laravel-provisioning",
+    "description": "Admin-created accounts for Laravel: invite instead of a password, a forced change when someone else set it, and a two-factor reset — with an optional Filament v5 panel plugin.",
+    "keywords": ["laravel", "provisioning", "invite", "password", "two-factor", "filament"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Rolland"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "illuminate/auth": "^13.0",
+        "illuminate/console": "^13.0",
+        "illuminate/database": "^13.0",
+        "illuminate/notifications": "^13.0",
+        "illuminate/queue": "^13.0",
+        "illuminate/support": "^13.0"
+    },
+    "require-dev": {
+        "filament/filament": "^5.0",
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.20",
+        "orchestra/testbench": "^11.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-browser": "^4.1",
+        "spatie/laravel-activitylog": "^5.0"
+    },
+    "suggest": {
+        "filament/filament": "Required only for the optional Filament v5 panel plugin (^5.0).",
+        "spatie/laravel-activitylog": "Optional: records provisioning events in the activity log with the source application's event names."
+    },
+    "autoload": {
+        "psr-4": {
+            "Rolland\\Provisioning\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rolland\\Provisioning\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rolland\\Provisioning\\ProvisioningServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test:core": "vendor/bin/pest --testsuite=core",
+        "test:bridge": "vendor/bin/pest --testsuite=bridge",
+        "test:browser": "vendor/bin/pest --testsuite=browser",
+        "test:lint": "vendor/bin/pint --test",
+        "lint": "vendor/bin/pint",
+        "analyse": "vendor/bin/phpstan analyse"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        },
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

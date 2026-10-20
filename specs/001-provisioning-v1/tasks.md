@@ -10,15 +10,15 @@
 
 ## Phase 1: Setup — the package skeleton
 
-- [ ] T001 `composer.json` (`rolland97/laravel-provisioning`, PHP ^8.3, `illuminate/*` ^13, dev: filament ^5, testbench ^11, pest ^4 + browser plugin, larastan ^3, pint; suggest filament, spatie/laravel-activitylog; PSR-4 `Rolland\Provisioning\` → `src/`, tests `Rolland\Provisioning\Tests\`; provider auto-discovery; scripts as `rolland97/laravel-tree`); `composer install`
-- [ ] T002 [P] `phpunit.xml.dist` (random order, fail on warning/risky/notice/deprecation/empty, strict output; suites `core`, `bridge`, `browser`), `phpstan.neon.dist` (src + config, level 8), `pint.json`, `.gitignore`, `LICENSE` (MIT) — re-cite AGENTS R-023/R-024/R-026
-- [ ] T003 [P] `tests/Pest.php`, `tests/TestCase.php` (Testbench; sqlite memory; loads stubs as migrations; registers the provider), `tests/Fixtures/User.php` (Authenticatable + CanResetPassword + Notifiable, the six columns) and its fixture migration
-- [ ] T004 Spike (constitution "prove fragile seams first"): a bridge test boots a Testbench Filament panel that registers a plugin adding a page and a **persistent** auth middleware, and a second panel without it; assert the middleware runs only on the first panel and survives a Livewire update round trip. Record the mechanism in research.md (R4 addendum)
+- [X] T001 `composer.json` (`rolland97/laravel-provisioning`, PHP ^8.3, `illuminate/*` ^13, dev: filament ^5, testbench ^11, pest ^4 + browser plugin, larastan ^3, pint; suggest filament, spatie/laravel-activitylog; PSR-4 `Rolland\Provisioning\` → `src/`, tests `Rolland\Provisioning\Tests\`; provider auto-discovery; scripts as `rolland97/laravel-tree`); `composer install`
+- [X] T002 [P] `phpunit.xml.dist` (random order, fail on warning/risky/notice/deprecation/empty, strict output; suites `core`, `bridge`, `browser`), `phpstan.neon.dist` (src + config, level 8), `pint.json`, `.gitignore`, `LICENSE` (MIT) — re-cite AGENTS R-023/R-024/R-026
+- [X] T003 [P] `tests/Pest.php`, `tests/TestCase.php` (Testbench; sqlite memory; loads stubs as migrations; registers the provider), `tests/Fixtures/User.php` (Authenticatable + CanResetPassword + Notifiable, the six columns) and its fixture migration
+- [X] T004 Spike (constitution "prove fragile seams first"): a bridge test boots a Testbench Filament panel that registers a plugin adding a page and a **persistent** auth middleware, and a second panel without it; assert the middleware runs only on the first panel and survives a Livewire update round trip. Record the mechanism in research.md (R4 addendum)
 
 ## Phase 2: Foundational
 
 - [ ] T005 `config/provisioning.php` (columns ×6, broker, invite path + mail view, enforcement except/redirect, hooks ×3, `activity_log`, `record_logins`) and `src/Support/Columns.php` (typed accessors)
-- [ ] T006 [P] Stubs `database/migrations/add_provisioning_columns_to_users_table.php.stub` (four columns, each `hasColumn`-guarded, `force_password_change` default **false**) and `create_provisioning_tokens_table.php.stub` (email PK, token, created_at)
+- [X] T006 [P] Stubs `database/migrations/add_provisioning_columns_to_users_table.php.stub` (four columns, each `hasColumn`-guarded, `force_password_change` default **false**) and `create_provisioning_tokens_table.php.stub` (email PK, token, created_at)
 - [ ] T007 [P] Contracts `HandlesPasswordChange`, `DecidesEnforcementSkip`, `ProvidesPasswordRules` + defaults `NoopPasswordChange`, `NeverSkipEnforcement`, `LaravelPasswordRules`
 - [ ] T008 [P] Events `InviteSent`, `InviteResent`, `InviteAccepted`, `ForcedPasswordChangeCompleted`, `TwoFactorReset` — public readonly scalars only
 - [ ] T009 Core test `tests/Core/ProviderTest.php` first (red): provider registers the broker from config when the host has none and leaves a host-defined broker untouched; binds the three hooks from config; publishes config/stubs/translations/views under the four tags; boots with Filament absent (class check). Then `src/ProvisioningServiceProvider.php` (green)

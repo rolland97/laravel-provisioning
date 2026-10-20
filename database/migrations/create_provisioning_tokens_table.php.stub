@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+/*
+ * laravel-provisioning — invite tokens, in their OWN table (constitution II).
+ *
+ * ⚠️ Not `password_reset_tokens`. The framework's token repository keeps one row per
+ * email, so an invite and a password reset sharing a table evict each other: issuing
+ * either deletes the other's outstanding token. The source application lost invites
+ * that way until it split them.
+ */
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create(config('provisioning.broker.table', 'provisioning_tokens'), function (Blueprint $table): void {
+            $table->string('email')->primary();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists(config('provisioning.broker.table', 'provisioning_tokens'));
+    }
+};
