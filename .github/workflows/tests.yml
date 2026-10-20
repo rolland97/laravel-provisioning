@@ -1,0 +1,144 @@
+# ⚠️ AGENTS.md R-025: every action is pinned to a FULL commit SHA with the
+# human-readable version in a trailing comment, and every job declares an explicit
+# least-privilege `permissions:` block. A tag is a moving target; a SHA is not.
+# (SHAs as in rolland97/laravel-tree.)
+name: tests
+
+on:
+  push:
+    branches: [main, '00*-*']
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }} · ${{ matrix.dependency-version }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # 8.3 is the floor every runtime dependency declares; 8.5 is the platform
+        # this package is developed on. Laravel 13 only (constitution, Platform).
+        php: ['8.3', '8.4', '8.5']
+        dependency-version: [prefer-lowest, prefer-stable]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+        with:
+          dependency-versions: ${{ matrix.dependency-version }}
+
+      # core + bridge only; the browser suite needs Playwright and runs once below.
+      - name: Run the core and bridge suites
+        run: vendor/bin/pest --testsuite=core,bridge
+
+  static:
+    name: phpstan · pint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+
+      - name: Static analysis
+        run: vendor/bin/phpstan analyse --no-progress
+
+      - name: Formatting
+        run: vendor/bin/pint --test
+
+  browser:
+    name: browser suite · playwright
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+
+      - name: Install Playwright
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+
+      - name: Run the browser suite
+        run: vendor/bin/pest --testsuite=browser
+
+  # ⚠️ Constitution V: removing the packages is the only check that exercises the
+  # real condition — an import scan proves nothing about a provider that boots.
+  core-without-optional-packages:
+    name: core suite · filament/filament and spatie/laravel-activitylog uninstalled
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+
+      - name: Remove the optional packages
+        run: composer remove --dev filament/filament spatie/laravel-activitylog --no-interaction
+
+      - name: Confirm they are gone
+        run: |
+          test ! -d vendor/filament/filament || (echo "filament/filament is still installed" && exit 1)
+          test ! -d vendor/spatie/laravel-activitylog || (echo "spatie/laravel-activitylog is still installed" && exit 1)
+
+      - name: Run the core suite
+        run: vendor/bin/pest --testsuite=core
