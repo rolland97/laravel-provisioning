@@ -66,7 +66,7 @@
 - [X] T031 [P] `.github/workflows/tests.yml` (matrix 8.3/8.4/8.5 × lowest/stable on core+bridge; `core-without-filament`; browser job), actions SHA-pinned as `rolland97/laravel-tree`, least-privilege permissions — re-cite R-022/R-025
 - [X] T032 [P] `README.md` (install, publish tags, config, the three hooks, plugin wiring, upgrading an app that already has the columns) and `CLAUDE.md` session orientation
 - [X] T033 Re-cite every `[pending artifact]` rule in `AGENTS.md` against the files Phase 1/8 created; retag `[ratified]`
-- [ ] T034 Full local gate: core, core with Filament removed, bridge, browser, phpstan, pint; record in `specs/001-provisioning-v1/checklists/validation-log.md`
+- [X] T034 Full local gate: core, core with Filament removed, bridge, browser, phpstan, pint; record in `specs/001-provisioning-v1/checklists/validation-log.md`
 - [ ] T035 ⚠️ Outward: create the public GitHub repository `rolland97/laravel-provisioning` (owner-approved 2026-10-20), set default branch `001-provisioning-v1`, push; CI green on all jobs; record run ids
 - [ ] T036 `/speckit-superb-critique`; fix Critical and Important
 - [ ] T037 Owner review of the public API before any consumer adoption
