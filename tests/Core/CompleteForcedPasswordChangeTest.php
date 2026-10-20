@@ -84,6 +84,11 @@ it('refuses a session the host says may not complete the change', function (): v
         {
             return true;
         }
+
+        public function blockedRedirectUrl(Authenticatable $user): ?string
+        {
+            return null;
+        }
     });
 
     $user = flaggedUser();

@@ -61,6 +61,11 @@ it('lets a request the host exempts through, and leaves the flag for the owner',
         {
             return true;
         }
+
+        public function blockedRedirectUrl(Authenticatable $user): ?string
+        {
+            return null;
+        }
     });
 
     $user = armedUser();

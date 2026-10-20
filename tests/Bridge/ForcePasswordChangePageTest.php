@@ -88,8 +88,36 @@ it('refuses a session the host blocks, leaving the change for the owner', functi
         {
             return true;
         }
+
+        public function blockedRedirectUrl(Authenticatable $user): ?string
+        {
+            return null;
+        }
     });
 
     Livewire::test(ForcePasswordChange::class)->assertRedirect(Filament::getUrl());
+    expect($this->user->refresh()->force_password_change)->toBeTrue();
+});
+
+it('sends a blocked session where the host says, when it names a place', function (): void {
+    app()->bind(DecidesEnforcementSkip::class, fn () => new class implements DecidesEnforcementSkip
+    {
+        public function shouldSkip(Request $request, Authenticatable $user): bool
+        {
+            return true;
+        }
+
+        public function blocksCompletion(Authenticatable $user): bool
+        {
+            return true;
+        }
+
+        public function blockedRedirectUrl(Authenticatable $user): ?string
+        {
+            return '/somewhere-the-host-chose';
+        }
+    });
+
+    Livewire::test(ForcePasswordChange::class)->assertRedirect('/somewhere-the-host-chose');
     expect($this->user->refresh()->force_password_change)->toBeTrue();
 });

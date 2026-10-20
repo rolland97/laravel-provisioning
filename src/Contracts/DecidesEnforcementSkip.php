@@ -18,4 +18,11 @@ interface DecidesEnforcementSkip
 
     /** Whether the current session must be refused completion of the change. */
     public function blocksCompletion(Authenticatable $user): bool;
+
+    /**
+     * Where to send a session refused completion, or null for the panel's home. The
+     * source application sends a LAPSED impersonation to the "leave impersonation"
+     * route instead, which ends it.
+     */
+    public function blockedRedirectUrl(Authenticatable $user): ?string;
 }

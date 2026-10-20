@@ -103,3 +103,13 @@ for both branches. Every other FR and SC has a test listed in tasks.md.
 Rolland, 2026-10-20: public API approved ("approve, proceed with care"). Next: the
 consumer's adoption slice; no tag until it builds against this branch with its own tests'
 assertions unchanged.
+
+## Adoption finding 1 (2026-10-20): where a blocked session goes
+
+The consumer's `ImpersonationSecurityTest` requires a LAPSED impersonation reaching the change
+page to be sent to `filament-impersonate.leave` (which ends it), not to the panel home. The
+package could not express that, and changing the consumer's assertion is forbidden. Added
+`DecidesEnforcementSkip::blockedRedirectUrl(): ?string` (default null = panel home), used by the
+change page on mount and on save. Test first: red, then green; core+bridge 94/94, exit 0.
+API change after the owner's approval, before any release — additive in effect (one method with
+a null default in the shipped default class), recorded in contracts/public-api.md.

@@ -19,4 +19,9 @@ final class NeverSkipEnforcement implements DecidesEnforcementSkip
     {
         return false;
     }
+
+    public function blockedRedirectUrl(Authenticatable $user): ?string
+    {
+        return null;
+    }
 }

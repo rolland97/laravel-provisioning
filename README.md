@@ -128,7 +128,7 @@ Bind your own class in config `hooks`:
 | Contract | Default | Used for |
 |---|---|---|
 | `HandlesPasswordChange` | does nothing | after a forced change, e.g. end the person's other sessions |
-| `DecidesEnforcementSkip` | never skips | let a request past the trap (e.g. a permitted impersonation), and refuse completion to such a session |
+| `DecidesEnforcementSkip` | never skips | let a request past the trap (e.g. a permitted impersonation), refuse completion to such a session, and say where to send it (`null`: the panel's home) |
 | `ProvidesPasswordRules` | `Password::defaults()`, no view | rules for both pages, plus an optional view rendered under the password field (it receives `statePath`) |
 
 **Sessions after a forced change.** The package rotates the remember token. Other live

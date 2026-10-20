@@ -20,6 +20,7 @@ Support\InviteUrl::for(Authenticatable&CanResetPassword $user, #[SensitiveParame
 Contracts\HandlesPasswordChange::passwordChanged(Authenticatable $user, #[SensitiveParameter] string $newPassword): void   // [no-op]
 Contracts\DecidesEnforcementSkip::shouldSkip(Request $request, Authenticatable $user): bool                            // [false]
 Contracts\DecidesEnforcementSkip::blocksCompletion(Authenticatable $user): bool                                        // [false]
+Contracts\DecidesEnforcementSkip::blockedRedirectUrl(Authenticatable $user): ?string                                  // [null = panel home] — added 2026-10-20 by the consumer's adoption (a lapsed impersonation is sent to "leave")
 Contracts\ProvidesPasswordRules::rules(): array                                                                        // [[Password::defaults()]]
 Contracts\ProvidesPasswordRules::requirementsView(): ?string                                                           // [null] bridge only
 ```

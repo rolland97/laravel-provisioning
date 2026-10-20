@@ -38,10 +38,14 @@ final class ForcePasswordChange extends Page
     {
         $user = $this->user();
 
-        // e.g. an impersonator: the change waits for the account's owner.
-        if ($user === null || app(DecidesEnforcementSkip::class)->blocksCompletion($user) || ! data_get($user, Columns::forcePasswordChange())) {
+        if ($user === null || ! data_get($user, Columns::forcePasswordChange())) {
             $this->redirect(Filament::getUrl());
 
+            return;
+        }
+
+        // e.g. an impersonator: the change waits for the account's owner.
+        if ($this->sendAwayIfBlocked($user)) {
             return;
         }
 
@@ -90,9 +94,13 @@ final class ForcePasswordChange extends Page
     {
         $user = $this->user();
 
-        if ($user === null || app(DecidesEnforcementSkip::class)->blocksCompletion($user)) {
+        if ($user === null) {
             $this->redirect(Filament::getUrl());
 
+            return;
+        }
+
+        if ($this->sendAwayIfBlocked($user)) {
             return;
         }
 
@@ -120,6 +128,19 @@ final class ForcePasswordChange extends Page
     public function getSubheading(): string
     {
         return (string) __('provisioning::provisioning.force_change.helper');
+    }
+
+    private function sendAwayIfBlocked(Authenticatable $user): bool
+    {
+        $skip = app(DecidesEnforcementSkip::class);
+
+        if (! $skip->blocksCompletion($user)) {
+            return false;
+        }
+
+        $this->redirect($skip->blockedRedirectUrl($user) ?? Filament::getUrl());
+
+        return true;
     }
 
     private function user(): (Authenticatable&Model)|null
