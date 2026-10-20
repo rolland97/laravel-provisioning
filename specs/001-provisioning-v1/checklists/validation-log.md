@@ -113,3 +113,12 @@ package could not express that, and changing the consumer's assertion is forbidd
 change page on mount and on save. Test first: red, then green; core+bridge 94/94, exit 0.
 API change after the owner's approval, before any release — additive in effect (one method with
 a null default in the shipped default class), recorded in contracts/public-api.md.
+
+## Release — v0.1.0 (2026-10-20)
+
+Released on `fe48fa5` after the consumer (`ew-global-sdn-bhd/procument`, slice 111) was built
+against it unpublished: its existing provisioning-related tests passed with assertions unchanged
+(784; references only — 33 swapped lines in 10 files), its full suite 3978/3978 against the
+release archive, its browser suite 151/151, and a by-hand walk on its dev stack (invite through the
+branded mail, accept, forced change, an invite link in the pre-adoption form). Tag and GitHub release:
+https://github.com/rolland97/laravel-provisioning/releases/tag/v0.1.0
