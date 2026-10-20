@@ -42,3 +42,4 @@ package-lock.json
 # without it a fresh clone cannot reinstall superb/memorylint, which is part of
 # why that repo's reinstall path is recorded as untested.
 !.specify/extension-catalogs.yml
+tests/Browser/Traces

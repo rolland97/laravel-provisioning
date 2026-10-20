@@ -61,3 +61,14 @@ All other cases were red because their classes did not exist yet.
    `livewireReady()`; `arrivesAt()` reports the page text and field lengths on failure).
    Browser suite after the fix: **8 consecutive local runs 7/7**. Not a product defect: a
    person would have to type within a fraction of a second of the page loading.
+
+## Correction (2026-10-20): the browser suite exited 1 while every test passed
+
+The T034 entry above recorded the browser suite as passing from its "Tests: 7 passed" line;
+its **exit code was 1**, which nobody looked at until CI run 39374301355 failed with all 7
+tests green. Cause (PHPUnit `--log-events-text`): pestphp/pest-plugin-browser 5.1 calls
+`@rmdir(tests/Browser/Traces)` at start-up; with the directory absent PHP warns, PHPUnit 13
+records the warning despite the `@`, and `failOnWarning` turns it into exit 1. Fix:
+`tests/bootstrap.php` creates the directory before the plugin cleans up (strictness kept).
+After the fix, by exit code: browser 0 (three consecutive runs), core+bridge 0, phpstan 0.
+⚠️ Lesson recorded: a gate is its exit status, not a grep of its summary line.
