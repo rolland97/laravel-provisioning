@@ -74,6 +74,16 @@ return [
         'password_rules' => LaravelPasswordRules::class,
     ],
 
+    /*
+    | Gate abilities the Filament admin actions authorize against, with the user
+    | record as the argument. Grant them in a policy or `Gate::define()`; ungranted,
+    | the actions are hidden and refused (deny by default).
+    */
+    'abilities' => [
+        'send_invite' => 'sendProvisioningInvite',
+        'reset_two_factor' => 'resetTwoFactor',
+    ],
+
     // Record provisioning events in spatie/laravel-activitylog when it is installed.
     'activity_log' => true,
 

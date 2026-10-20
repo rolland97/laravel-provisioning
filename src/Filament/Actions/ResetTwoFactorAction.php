@@ -8,6 +8,7 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Rolland\Provisioning\Actions\ResetTwoFactor;
 use Rolland\Provisioning\Support\Columns;
 
@@ -25,6 +26,9 @@ final class ResetTwoFactorAction
             ->color('danger')
             ->requiresConfirmation()
             ->modalDescription(__('provisioning::provisioning.two_factor.reset_confirm'))
+            // Deny by default: the host grants the ability (config `abilities`).
+            ->authorize(fn (?Model $record): bool => $record !== null
+                && Gate::allows((string) config('provisioning.abilities.reset_two_factor', 'resetTwoFactor'), $record))
             ->visible(fn (?Model $record): bool => $record !== null && filled($record->getAttribute(Columns::twoFactorSecret())))
             ->action(function (Model $record): void {
                 if (! $record instanceof Authenticatable) {

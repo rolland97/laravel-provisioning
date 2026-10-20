@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
 use Rolland\Provisioning\Filament\Actions\ResetTwoFactorAction;
 use Rolland\Provisioning\Filament\Actions\SendInviteAction;
@@ -18,6 +19,38 @@ beforeEach(function (): void {
     Filament::setCurrentPanel(Filament::getPanel('admin'));
     $this->admin = BridgeUser::query()->create(['name' => 'Admin', 'email' => 'admin@example.test', 'password' => 'whatever-123']);
     $this->actingAs($this->admin);
+
+    // The host grants both abilities; the deny-by-default cases below revoke them.
+    Gate::define('sendProvisioningInvite', fn (): bool => true);
+    Gate::define('resetTwoFactor', fn (): bool => true);
+});
+
+/*
+ * From an automated security review: the actions authorize themselves against a
+ * host-granted ability, so placing one on a page the host forgot to protect still
+ * exposes nothing. Policy stays the host's (constitution III); the default is deny.
+ */
+it('denies both actions unless the host grants the ability', function (): void {
+    Gate::define('sendProvisioningInvite', fn (): bool => false);
+    Gate::define('resetTwoFactor', fn (): bool => false);
+
+    $never = actionTarget(['app_authentication_secret' => 'JBSWY3DPEHPK3PXP']);
+
+    expect(SendInviteAction::make()->record($never)->isAuthorized())->toBeFalse()
+        ->and(SendInviteAction::make()->record($never)->isVisible())->toBeFalse()
+        ->and(ResetTwoFactorAction::make()->record($never)->isAuthorized())->toBeFalse()
+        ->and(ResetTwoFactorAction::make()->record($never)->isVisible())->toBeFalse();
+});
+
+it('uses the ability names the host configured', function (): void {
+    config(['provisioning.abilities.send_invite' => 'host.invite', 'provisioning.abilities.reset_two_factor' => 'host.reset']);
+    Gate::define('host.invite', fn (): bool => true);
+    Gate::define('host.reset', fn (): bool => false);
+
+    $target = actionTarget(['app_authentication_secret' => 'JBSWY3DPEHPK3PXP']);
+
+    expect(SendInviteAction::make()->record($target)->isAuthorized())->toBeTrue()
+        ->and(ResetTwoFactorAction::make()->record($target)->isAuthorized())->toBeFalse();
 });
 
 function actionTarget(array $attributes = []): BridgeUser

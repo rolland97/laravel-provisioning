@@ -9,6 +9,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use Rolland\Provisioning\Actions\SendInvite;
 use Rolland\Provisioning\Support\Columns;
 
@@ -25,6 +26,9 @@ final class SendInviteAction
             ->icon('heroicon-o-envelope')
             ->color('info')
             ->requiresConfirmation()
+            // Deny by default: the host grants the ability (config `abilities`).
+            ->authorize(fn (?Model $record): bool => $record !== null
+                && Gate::allows((string) config('provisioning.abilities.send_invite', 'sendProvisioningInvite'), $record))
             ->visible(fn (?Model $record): bool => $record !== null && blank($record->getAttribute(Columns::lastLoginAt())))
             ->action(function (Model $record): void {
                 if (! $record instanceof Authenticatable || ! $record instanceof CanResetPassword) {

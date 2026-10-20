@@ -1,0 +1,9 @@
+{
+    "name": "laravel-provisioning",
+    "private": true,
+    "type": "module",
+    "description": "Browser-test tooling only. NOT shipped — see .gitattributes export-ignore.",
+    "devDependencies": {
+        "playwright": "1.64.0"
+    }
+}
