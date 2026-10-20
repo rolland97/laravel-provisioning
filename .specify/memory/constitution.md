@@ -120,7 +120,7 @@ cannot be retracted.
 
 ## Platform and Toolchain Constraints
 
-**Platform**: PHP 8.3+, `illuminate/*` ^13 (the one consumer is on Laravel `^13.17`; support
+**Platform**: PHP 8.4+, `illuminate/*` ^13 (the one consumer is on Laravel `^13.17`; support
 starts narrow and widens when a host needs it — widening is non-breaking, narrowing is not).
 The Filament bridge targets v5.
 
@@ -156,4 +156,22 @@ MAJOR — a principle removed or redefined to permit what it forbade; MINOR — 
 section added or materially expanded; PATCH — wording only. **Compliance**: every plan carries a
 Constitution Check against this file, before research and after design.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-20 | **Last Amended**: 2026-10-20
+**Version**: 1.1.0 | **Ratified**: 2026-10-20 | **Last Amended**: 2026-10-20
+
+<!--
+AMENDMENT 1.0.0 → 1.1.0 (2026-10-20)
+MINOR. § Platform narrows: PHP 8.4+ (was 8.3+).
+
+PRINCIPLE AFFECTED: none — the Platform section, not a principle.
+
+REASON: the test tooling moved to Pest 5 during T029 (Pest 4's browser plugin hangs on
+Playwright after 1.61, and Pest 5 / Playwright 1.64 are the consumer's versions), and Pest 5
+requires PHP ^8.4. The first CI run could not install on PHP 8.3, so an 8.3 claim could not be
+tested — and this constitution forbids a claim the CI matrix does not prove.
+
+WHAT IS TRADED AWAY: installability on PHP 8.3 for hosts who do not exist yet. The one consumer
+runs PHP 8.5. Widening later is non-breaking; narrowing after publication would not be — and
+nothing is published.
+
+MIGRATION: composer.json `php` ^8.4; CI matrix 8.4/8.5; AGENTS.md R-026; plan; README.
+-->

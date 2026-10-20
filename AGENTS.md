@@ -95,7 +95,7 @@ the plan creates it. ✅ None remain: R-022…R-027 were re-cited against their 
   `config`), `pint.json`, CI job `static`.* **[ratified]**
 - **R-025** — CI actions pinned to a full SHA with the version in a comment; least-privilege
   `permissions:` per workflow. *Constitution, Platform; `.github/workflows/tests.yml`.* **[ratified]**
-- **R-026** — PHP ^8.3, `illuminate/*` ^13, Filament v5 for the bridge; do not widen without a
+- **R-026** — PHP ^8.4 (constitution 1.1.0), `illuminate/*` ^13, Filament v5 for the bridge; do not widen without a
   host that needs it. *Constitution, Platform; `composer.json` `require`.* **[ratified]**
   Dev tooling is Pest 5 / PHPUnit 13 / Playwright 1.64 — the consumer's versions; Pest 4's
   browser plugin hangs on Playwright after 1.61 (plan, Technical Context).

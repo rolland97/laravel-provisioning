@@ -26,9 +26,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 8.3 is the floor every runtime dependency declares; 8.5 is the platform
+        # 8.4 is the floor (Pest 5 needs it — constitution 1.1.0); 8.5 is the platform
         # this package is developed on. Laravel 13 only (constitution, Platform).
-        php: ['8.3', '8.4', '8.5']
+        php: ['8.4', '8.5']
         dependency-version: [prefer-lowest, prefer-stable]
 
     steps:

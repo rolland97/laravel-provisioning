@@ -32,12 +32,13 @@ it('renders styled by the panel theme, not as bare HTML', function (): void {
 });
 
 it('sets the password and lands on the panel sign-in', function (): void {
-    $page = visit(inviteLinkPath());
+    $page = livewireReady(visit(inviteLinkPath()));
 
-    $page->type('[id="form.password"]', 'a-brand-new-Secret-1')
-        ->type('[id="form.passwordConfirmation"]', 'a-brand-new-Secret-1')
-        ->click('button[type="submit"]')
-        ->assertPathIs('/admin/login');
+    typeInto($page, 'form.password', 'a-brand-new-Secret-1');
+    typeInto($page, 'form.passwordConfirmation', 'a-brand-new-Secret-1');
+    $page->click('button[type="submit"]');
+
+    arrivesAt($page, '/admin/login');
 
     expect(Hash::check('a-brand-new-Secret-1', BridgeUser::query()->firstOrFail()->password))->toBeTrue();
 });

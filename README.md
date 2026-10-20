@@ -19,7 +19,7 @@ Extracted from a production procurement application, where all of this already r
 
 ## Requirements
 
-PHP 8.3+, Laravel 13. Filament 5 for the plugin (optional).
+PHP 8.4+, Laravel 13. Filament 5 for the plugin (optional).
 
 ## Install
 

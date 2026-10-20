@@ -17,15 +17,16 @@ beforeEach(function (): void {
 });
 
 it('sends an armed user to the change page, then lets them in once it is saved', function (): void {
-    $page = visit('/admin');
+    $page = livewireReady(visit('/admin'));
 
-    $page->assertPathIs('/admin/force-password-change')
-        ->type('[id="form.current_password"]', 'set-by-an-admin-1')
-        ->type('[id="form.password"]', 'my-own-new-Secret-12')
-        ->type('[id="form.password_confirmation"]', 'my-own-new-Secret-12')
-        // Scoped to the page's form: the user menu's "Sign out" is a submit button too.
-        ->click('.fi-main form.fi-form button[type="submit"]')
-        ->assertPathIs('/admin');
+    $page->assertPathIs('/admin/force-password-change');
+    typeInto($page, 'form.current_password', 'set-by-an-admin-1');
+    typeInto($page, 'form.password', 'my-own-new-Secret-12');
+    typeInto($page, 'form.password_confirmation', 'my-own-new-Secret-12');
+    // Scoped to the page's form: the user menu's "Sign out" is a submit button too.
+    $page->click('.fi-main form.fi-form button[type="submit"]');
+
+    arrivesAt($page, '/admin');
 
     expect($this->user->refresh()->force_password_change)->toBeFalse();
 });

@@ -47,3 +47,17 @@ All other cases were red because their classes did not exist yet.
 - `invite.route` config added: with the plugin, the accept page lives under the accepting
   panel (`filament.{panel}.provisioning.accept`), not at the application root.
 - `provisioning.abilities` config added (security review 2).
+
+## T035 — first CI run (GitHub run 39373651220, `aadf400`): 2 causes, both fixed
+
+1. **PHP 8.3 legs could not install**: Pest 5 requires PHP ^8.4. The floor moves to 8.4 by
+   constitution amendment 1.1.0 (composer, CI matrix 8.4/8.5, AGENTS R-026, plan, README).
+2. **Browser "sets the password and lands on the panel sign-in" stayed on the form.**
+   Reproduced locally (1 run in 6) once a helper reported the page's state: `form.password`
+   was EMPTY while its confirmation held all 20 characters — the revealable password input
+   finishing its Alpine set-up after Livewire booted wiped the first typed value, so the form
+   submitted without a password. The same cause explains the earlier unexplained local failure
+   of the change-page walk. Fix in the tests (`typeInto()` types, waits and re-checks;
+   `livewireReady()`; `arrivesAt()` reports the page text and field lengths on failure).
+   Browser suite after the fix: **8 consecutive local runs 7/7**. Not a product defect: a
+   person would have to type within a fraction of a second of the page loading.
