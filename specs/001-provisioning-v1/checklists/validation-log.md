@@ -72,3 +72,28 @@ records the warning despite the `@`, and `failOnWarning` turns it into exit 1. F
 `tests/bootstrap.php` creates the directory before the plugin cleans up (strictness kept).
 After the fix, by exit code: browser 0 (three consecutive runs), core+bridge 0, phpstan 0.
 ⚠️ Lesson recorded: a gate is its exit status, not a grep of its summary line.
+
+## T035 — CI green (GitHub run 39374718877, `cdcd4b7`)
+
+All 7 jobs passed: PHP 8.4/8.5 × prefer-lowest/prefer-stable (core + bridge), phpstan · pint,
+the browser suite (Playwright), and the core suite with filament/filament and
+spatie/laravel-activitylog uninstalled. Repository public at
+https://github.com/rolland97/laravel-provisioning (default branch `001-provisioning-v1`, no tag).
+
+## T036 — critique (2026-10-20)
+
+**Critical: none. Important: none open** (the two security-review findings are fixed above).
+Minor, recorded rather than changed:
+
+1. `acceptsInvites()` writes `provisioning.invite.route` at panel registration, so with two
+   accepting panels the last registered wins — the README says to register it on one panel.
+2. `SendInviteAction` is labelled "Resend invite" even for a first send from an edit page; the
+   consumer only ever offers it as a re-send (before first sign-in), so the wording matches its
+   use. A host wanting "Send" relabels with `->label()`.
+3. Brute force on the accept page needs a valid signature on the link first (the route checks it
+   before the token), and tokens are 64 random hex characters; the broker's `throttle` limits
+   re-issue, not guesses — acceptable because guesses never reach the broker unsigned.
+
+FR-001 (unusable password on create) is documented as host code in the README with the
+recipe the consumer uses; the package provides `SendInvite` and `ArmForcedPasswordChange`
+for both branches. Every other FR and SC has a test listed in tasks.md.

@@ -67,8 +67,8 @@
 - [X] T032 [P] `README.md` (install, publish tags, config, the three hooks, plugin wiring, upgrading an app that already has the columns) and `CLAUDE.md` session orientation
 - [X] T033 Re-cite every `[pending artifact]` rule in `AGENTS.md` against the files Phase 1/8 created; retag `[ratified]`
 - [X] T034 Full local gate: core, core with Filament removed, bridge, browser, phpstan, pint; record in `specs/001-provisioning-v1/checklists/validation-log.md`
-- [ ] T035 ⚠️ Outward: create the public GitHub repository `rolland97/laravel-provisioning` (owner-approved 2026-10-20), set default branch `001-provisioning-v1`, push; CI green on all jobs; record run ids
-- [ ] T036 `/speckit-superb-critique`; fix Critical and Important
+- [X] T035 ⚠️ Outward: create the public GitHub repository `rolland97/laravel-provisioning` (owner-approved 2026-10-20), set default branch `001-provisioning-v1`, push; CI green on all jobs; record run ids
+- [X] T036 `/speckit-superb-critique`; fix Critical and Important
 - [ ] T037 Owner review of the public API before any consumer adoption
 
 **Not in this repository**: the adoption slice (`specs/NNN-adopt-laravel-provisioning` in the
