@@ -121,3 +121,21 @@ it('sends a blocked session where the host says, when it names a place', functio
     Livewire::test(ForcePasswordChange::class)->assertRedirect('/somewhere-the-host-chose');
     expect($this->user->refresh()->force_password_change)->toBeTrue();
 });
+
+/*
+ * 002 FR-004: the page is a card page, like signing in — the person can go nowhere
+ * until they finish, so the panel's navigation is noise. Signed in, Filament's simple
+ * layout offers its own user menu, which is the way out.
+ */
+it('renders as a card page with no sidebar or top bar, and a user menu to sign out', function (): void {
+    $response = $this->get(ForcePasswordChange::getUrl(panel: 'admin'))->assertOk();
+
+    $response->assertSee('fi-simple-layout', escape: false)
+        ->assertSee('fi-simple-page', escape: false)
+        ->assertSee('fi-width-lg', escape: false)
+        ->assertDontSee('fi-sidebar', escape: false)
+        ->assertDontSee('fi-topbar', escape: false)
+        ->assertSee('fi-user-menu', escape: false)
+        ->assertSee(__('provisioning::provisioning.force_change.title'))
+        ->assertSee(__('provisioning::provisioning.force_change.submit'));
+});

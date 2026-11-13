@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Rolland\Provisioning\Filament\Pages;
 
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\EmbeddedSchema;
+use Filament\Schemas\Components\Form;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Htmlable;
@@ -26,6 +30,16 @@ use Rolland\Provisioning\Support\Columns;
 final class ForcePasswordChange extends Page
 {
     protected string $view = 'provisioning::filament.pages.force-password-change';
+
+    /**
+     * A card page, like signing in (002 FR-004): the person can go nowhere until they
+     * finish, so the panel's sidebar and top bar are noise. It stays a `Page` — its
+     * route, `getUrl()` (which the enforcing middleware redirects to) and registration
+     * through `$panel->pages()` are unchanged — and takes the simple layout exactly as
+     * `Filament\Pages\SimplePage` declares it. Signed in, that layout shows Filament's
+     * own user menu, which is the way to sign out.
+     */
+    protected static string $layout = 'filament-panels::components.layout.simple';
 
     protected static ?string $slug = 'force-password-change';
 
@@ -90,6 +104,28 @@ final class ForcePasswordChange extends Page
             ->statePath('data');
     }
 
+    /**
+     * Built the way Filament's own sign-in page builds its form — a `Form` holding the
+     * form schema, with a full-width submit in its footer — so the spacing and the
+     * button come from Filament, not from utilities a host's theme may never compile.
+     */
+    public function content(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Form::make([EmbeddedSchema::make('form')])
+                    ->id('form')
+                    ->livewireSubmitHandler('save')
+                    ->footer([
+                        Actions::make([
+                            Action::make('save')
+                                ->label(__('provisioning::provisioning.force_change.submit'))
+                                ->submit('save'),
+                        ])->fullWidth()->key('form-actions'),
+                    ]),
+            ]);
+    }
+
     public function save(): void
     {
         $user = $this->user();
@@ -118,6 +154,25 @@ final class ForcePasswordChange extends Page
         Notification::make()->title(__('provisioning::provisioning.force_change.saved'))->success()->send();
 
         $this->redirect(Filament::getUrl());
+    }
+
+    public function hasLogo(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getLayoutData(): array
+    {
+        // Null lets the simple layout use the panel's card width, as on the sign-in
+        // page; a `Page`'s own content width is the full-page one.
+        return [
+            'hasTopbar' => true,
+            'maxContentWidth' => null,
+            'maxWidth' => null,
+        ];
     }
 
     public function getTitle(): string

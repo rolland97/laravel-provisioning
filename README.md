@@ -6,7 +6,8 @@ Admin-created accounts for Laravel 13, done safely:
   single-use, expiring link and chooses their own.
 - **A forced change when someone else set the password.** If an administrator sets a
   password, the person must replace it at next sign-in, and is never trapped somewhere
-  they cannot leave.
+  they cannot leave. A completed password reset counts: someone who chooses a password
+  through a reset link is not asked to choose one again.
 - **A two-factor reset**, from an admin button or, when the last administrator is locked
   out, from the console.
 - **Your audit trail.** Every step fires an event with identifiers only; an optional
@@ -49,6 +50,9 @@ $panel->plugin(
         ->acceptsInvites()        // invite links open under this panel and return to its sign-in
 );
 ```
+
+**The change page** is a card page, like signing in: logo, the form, and Filament's own
+user menu to sign out. No sidebar or top bar — the person can go nowhere until they finish.
 
 **The trap.** It is a persistent auth middleware, so a flag set mid-session traps the
 person on their next request. While armed, these stay reachable:
@@ -160,6 +164,11 @@ sessions are your policy:
 The activity-log writer registers only when `spatie/laravel-activitylog` is installed. Turn
 it off with `activity_log => false`. A successful sign-in stamps `last_login_at` and
 increments `login_count` (`record_logins`).
+
+**A completed password reset** (Laravel's `PasswordReset` event, which fires only after a
+successful reset) clears the forced change and stamps `password_changed_at`; when the change
+was armed it also fires `ForcedPasswordChangeCompleted`. Turn it off with
+`clear_on_password_reset => false`.
 
 ## Configuration
 

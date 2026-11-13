@@ -90,4 +90,8 @@ return [
     // Stamp last_login_at and increment login_count on each successful sign-in.
     'record_logins' => true,
 
+    // A completed password reset is the person's own password: clear the forced
+    // change and stamp password_changed_at (002).
+    'clear_on_password_reset' => true,
+
 ];
