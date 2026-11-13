@@ -27,6 +27,16 @@ final class ForcePasswordChange extends Page
 {
     protected string $view = 'provisioning::filament.pages.force-password-change';
 
+    /**
+     * A card page, like signing in (002 FR-004): the person can go nowhere until they
+     * finish, so the panel's sidebar and top bar are noise. It stays a `Page` — its
+     * route, `getUrl()` (which the enforcing middleware redirects to) and registration
+     * through `$panel->pages()` are unchanged — and takes the simple layout exactly as
+     * `Filament\Pages\SimplePage` declares it. Signed in, that layout shows Filament's
+     * own user menu, which is the way to sign out.
+     */
+    protected static string $layout = 'filament-panels::components.layout.simple';
+
     protected static ?string $slug = 'force-password-change';
 
     protected static bool $shouldRegisterNavigation = false;
@@ -118,6 +128,25 @@ final class ForcePasswordChange extends Page
         Notification::make()->title(__('provisioning::provisioning.force_change.saved'))->success()->send();
 
         $this->redirect(Filament::getUrl());
+    }
+
+    public function hasLogo(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getLayoutData(): array
+    {
+        // Null lets the simple layout use the panel's card width, as on the sign-in
+        // page; a `Page`'s own content width is the full-page one.
+        return [
+            'hasTopbar' => true,
+            'maxContentWidth' => null,
+            'maxWidth' => null,
+        ];
     }
 
     public function getTitle(): string

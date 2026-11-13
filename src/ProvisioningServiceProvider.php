@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rolland\Provisioning;
 
 use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Rolland\Provisioning\Console\ResetTwoFactorCommand;
@@ -16,6 +17,7 @@ use Rolland\Provisioning\Events\InviteAccepted;
 use Rolland\Provisioning\Events\InviteResent;
 use Rolland\Provisioning\Events\InviteSent;
 use Rolland\Provisioning\Events\TwoFactorReset;
+use Rolland\Provisioning\Listeners\ClearForcedChangeOnPasswordReset;
 use Rolland\Provisioning\Listeners\RecordProvisioningActivity;
 use Rolland\Provisioning\Listeners\RecordSuccessfulLogin;
 
@@ -61,12 +63,13 @@ final class ProvisioningServiceProvider extends ServiceProvider
     }
 
     /**
-     * The sign-in recorder, and — only when spatie/laravel-activitylog is installed —
+     * The sign-in recorder, the reset that clears the forced change (002), and — only when spatie/laravel-activitylog is installed —
      * the activity writer. Each checks its own config switch when it runs.
      */
     private function registerListeners(): void
     {
         Event::listen(Login::class, RecordSuccessfulLogin::class);
+        Event::listen(PasswordReset::class, ClearForcedChangeOnPasswordReset::class);
 
         // The `activity()` helper, not a class: activitylog moved its logger class
         // between majors (v5: Support\\ActivityLogger), the helper stayed.
