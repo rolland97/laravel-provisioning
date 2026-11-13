@@ -23,8 +23,8 @@ it('sends an armed user to the change page, then lets them in once it is saved',
     typeInto($page, 'form.current_password', 'set-by-an-admin-1');
     typeInto($page, 'form.password', 'my-own-new-Secret-12');
     typeInto($page, 'form.password_confirmation', 'my-own-new-Secret-12');
-    // Scoped to the page's form: the user menu's "Sign out" is a submit button too.
-    $page->click('main form.fi-form button[type="submit"]');
+    // Scoped to the page's form (id "form"): the user menu's "Sign out" is a submit button too.
+    $page->click('form#form button[type="submit"]');
 
     arrivesAt($page, '/admin');
 

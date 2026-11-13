@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Rolland\Provisioning\Filament\Pages;
 
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\EmbeddedSchema;
+use Filament\Schemas\Components\Form;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Htmlable;
@@ -98,6 +102,28 @@ final class ForcePasswordChange extends Page
                     ->required(),
             ])
             ->statePath('data');
+    }
+
+    /**
+     * Built the way Filament's own sign-in page builds its form — a `Form` holding the
+     * form schema, with a full-width submit in its footer — so the spacing and the
+     * button come from Filament, not from utilities a host's theme may never compile.
+     */
+    public function content(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Form::make([EmbeddedSchema::make('form')])
+                    ->id('form')
+                    ->livewireSubmitHandler('save')
+                    ->footer([
+                        Actions::make([
+                            Action::make('save')
+                                ->label(__('provisioning::provisioning.force_change.submit'))
+                                ->submit('save'),
+                        ])->fullWidth()->key('form-actions'),
+                    ]),
+            ]);
     }
 
     public function save(): void
